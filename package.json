@@ -1,0 +1,23 @@
+{
+  "name": "ankiman",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Tool that uses ChatGPT to generate content for anki decks and provides those decks as a download",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@gxr1020/anki-apkg-export": "^0.0.2",
+    "anki-apkg-export": "^4.0.3",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "file-saver": "^2.0.5",
+    "genanki-js": "^2.0.0",
+    "openai": "^4.50.0"
+  }
+}
