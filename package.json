@@ -15,7 +15,9 @@
     "anki-apkg-export": "^4.0.3",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
     "file-saver": "^2.0.5",
     "genanki-js": "^2.0.0",
     "openai": "^4.50.0"

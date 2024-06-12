@@ -1,0 +1,41 @@
+
+<div class="row mt-3"></div>
+<div class="row mt-5">
+    <div class="col">
+        <!-- Form -->
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <label for="name">Article Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="language">Language:</label>
+                <select class="form-control" id="language" name="language" required>
+                    <option value="english">English</option>
+                    <option value="russian">Russian</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
+                    <option value="german">Italian</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="level">Language Level:</label>
+                <select class="form-control" id="level" name="level" required>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="text">Enter article text:</label>
+                <textarea class="form-control" id="text" name="text" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
