@@ -1,5 +1,6 @@
 const fs = require('fs');
-
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 const { default: AnkiExport } = require('anki-apkg-export');
 //const { default: AnkiExport } = require('../../dist');
 
@@ -21,19 +22,25 @@ async function addCards(cardData, name) {
         cardData.words.forEach((card) => {
             apkg.addCard(card.word, card.definition + "\n\n\n<br /><br />" + card.context, { tags: ['article_word'] });
         })
-        // apkg.addCard('card #1 front', 'card #1 back');
-        // apkg.addCard('card #2 front', 'card #2 back');
-        // apkg.addCard('card #3 with image <img src="anki.png" />', 'card #3 back');
 
+        const filename = `${name}-${uuidv4()}.apkg`;
+        const outputPath = path.join(__dirname, 'tmp', filename);
+
+        if (!fs.existsSync(path.join(__dirname, 'tmp'))) {
+            fs.mkdirSync(path.join(__dirname, 'tmp'));
+        }
+
+        let file = null;
         apkg
             .save()
             .then(zip => {
-                fs.writeFileSync('./output.apkg', zip, 'binary');
-                console.log(`Package has been generated: output.apkg`);
+                file = zip
+                fs.writeFileSync(outputPath, zip, 'binary');
+                console.log(`Package has been generated: ${outputPath}`);
             })
             .catch(err => console.log(err.stack || err));
 
-        return {};
+        return {file: file, outputPath: outputPath};
     } catch (error) {
         console.error('Error adding cards to deck for export:', error);
         throw error;

@@ -20,8 +20,8 @@ export async function getChatGptResponse(prompt, name, language, level) {
     });
 
     const gptResponse = response.choices[0].message.content
-    await addCards(JSON.parse(gptResponse), name); // Make sure gptResponse is parsed correctly if it's a JSON string
-    return gptResponse;
+    let addCardsResponse = await addCards(JSON.parse(gptResponse), name); // Make sure gptResponse is parsed correctly if it's a JSON string
+    return {gptResponse: gptResponse, addCardsResponse: addCardsResponse};
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     throw error;

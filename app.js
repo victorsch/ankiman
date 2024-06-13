@@ -5,6 +5,13 @@ import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
 import { getChatGptResponse } from './chatgpt.js';
 import expressLayouts from 'express-ejs-layouts';
+import sequelize from './db.js';
+import User from './models/User.js';
+import Query from './models/Query.js'
+import { promisify } from 'util';
+import fs from 'fs';
+
+const unlinkAsync = promisify(fs.unlink);
 
 dotenv.config();
 
@@ -26,6 +33,11 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Sync database
+sequelize.sync({ force: true }).then(() => {
+    console.log('Database synced');
+});
+
 let resultData = {};
 
 app.get('/', (req, res) => {
@@ -41,8 +53,8 @@ app.post('/submit', async (req, res) => {
     console.log('Text received:', text);
 
     try {
-        const gptResponse = await getChatGptResponse(text, name, language, level);
-        console.log('GPT-4 response:', gptResponse);
+        const response = await getChatGptResponse(text, name, language, level);
+        console.log('GPT-4 response:', response.gptResponse);
 
         // Store the result in the global variable
         resultData = {
@@ -50,10 +62,34 @@ app.post('/submit', async (req, res) => {
             language,
             level,
             input: text,
-            gptResponse: gptResponse,
-          };
+            gptResponse: response.gptResponse,
+            addCardsResponse: response.addCardsResponse,
+            outputPath: response.addCardsResponse.outputPath
+        };
 
-        res.redirect('/results', );
+        // Assuming user ID is 1 for this example, replace with actual user logic
+        // const user = await User.findByPk(1);
+        // const query = await Query.create({
+        //     text: text,
+        //     response: gptResponse,
+        //     UserId: user.id,
+        // });
+
+        // // Assume gptResponse contains words in an array for simplicity
+        // const words = [
+        //     { text: 'слово1', definition: 'definition1', example: 'example1' },
+        //     { text: 'слово2', definition: 'definition2', example: 'example2' },
+        // ];
+
+        // for (const word of words) {
+        //     await Word.create({
+        //         ...word,
+        //         UserId: user.id,
+        //         QueryId: query.id,
+        //     });
+        // }
+
+        res.redirect('/results',);
     } catch (error) {
         res.status(500).send('Error processing your request');
     }
@@ -61,6 +97,26 @@ app.post('/submit', async (req, res) => {
 
 app.get('/api/result', (req, res) => {
     res.json(resultData);
+});
+
+app.get('/download/:filename', (req, res) => {
+    const { filename } = req.params;
+    const filePath = path.join(__dirname, 'tmp', filename);
+
+    res.download(filePath, filename, async (err) => {
+        if (err) {
+            console.error('Error downloading file:', err);
+            res.status(500).send('Error downloading file');
+        } else {
+            // Clean up the file after download
+            try {
+                await unlinkAsync(filePath);
+                console.log(`File ${filename} deleted`);
+            } catch (error) {
+                console.error('Error deleting file:', error);
+            }
+        }
+    });
 });
 
 const port = 3000;

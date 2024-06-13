@@ -20,6 +20,9 @@
     "express-ejs-layouts": "^2.5.1",
     "file-saver": "^2.0.5",
     "genanki-js": "^2.0.0",
-    "openai": "^4.50.0"
+    "openai": "^4.50.0",
+    "sequelize": "^6.37.3",
+    "sqlite3": "^5.1.7",
+    "uuid": "^10.0.0"
   }
 }

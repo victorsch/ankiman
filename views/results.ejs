@@ -7,5 +7,7 @@
         <p><strong>Language Level:</strong> <%= resultData.level %></p>
         <p><strong>GPT-4 Response:</strong></p>
         <pre><%= resultData.gptResponse %></pre>
-    </div>
+        <% if (resultData.outputPath) { %>
+            <a href="/download/<%= resultData.outputPath.split('/').pop() %>" class="btn btn-primary">Download Anki Package</a>
+        <% } %>    </div>
 </div>
